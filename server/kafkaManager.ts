@@ -74,7 +74,7 @@ export class KafkaManager {
         }
     }
 
-    async initializeProducer(topic: string, data: EventData) {
+    async sendProducerMessage(topic: string, data: EventData) {
         try {
             const msg: Message = {
                 value: JSON.stringify(data)
@@ -135,5 +135,29 @@ export class KafkaManager {
         }
     }
 
+    async consumeMessages(topic: string, groupId: string) {
+        const eachMessageHandler = async (payload: EachMessagePayload) => {
+            const { topic, partition, message } = payload;
+            console.log({
+                topic,
+                partition,
+                key: message.key?.toString(),
+                value: message.value?.toString(),
+            });
+        };
+        await this.initializeConsumer(topic, groupId, eachMessageHandler);
+    }
+
+    async initializeKafka(topic: string) {
+        await this.connectAdmin();
+        await this.createTopics([{ topic: topic, numPartitions: 2, replicationFactor: 1 }]);
+        await this.connectProducer();
+    }
+    
+    async disconnectKafka(topic: string){
+        await this.disconnectAdmin();
+        await this.disconnectProducer();
+        await this.disconnectConsumer(topic);
+    }
 
 }
