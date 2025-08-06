@@ -13,7 +13,9 @@ const kafka = new Kafka({
 
 // Create consumer
 const consumer = kafka.consumer({ 
-  groupId: kafkaConfig.groupId 
+  groupId: kafkaConfig.groupId,
+  sessionTimeout: 30000,
+  heartbeatInterval: 3000
 });
 
 async function startConsumer() {

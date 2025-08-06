@@ -2,6 +2,6 @@
 export const kafkaConfig = {
   clientId: 'macmini-consumer',
   brokers: ['localhost:9092'], // Kafka running on this machine
-  topic: 'cross-device-topic',
+  topic: 'test-messages',
   groupId: 'macmini-consumer-group'
 }; 
