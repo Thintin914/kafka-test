@@ -60,6 +60,9 @@ npm run producer
 # Start Kafka
 docker-compose up -d
 
+# Wait for Kafka to be ready (about 30 seconds)
+sleep 30
+
 # Start consumer
 npm run macmini
 ```
@@ -122,13 +125,13 @@ npm run macbook
 **Mac Mini Consumer:**
 ```
 🔌 [Mac Mini] Consumer connected to Kafka
-📥 Subscribed to topic: cross-device-topic
+📥 Subscribed to topic: simple-test
 👂 Waiting for messages from MacBook...
 
 📨 [Mac Mini] Received message from MacBook:
    📱 From: MacBook
-   📍 Topic: cross-device-topic
-   🕐 Timestamp: 2024-01-15T10:30:00.000Z
+   📍 Topic: simple-test
+   🕐 Timestamp: 2025-08-06T06:51:30.000Z
    💬 Message: "Hello Mac Mini!"
 ```
 
@@ -176,6 +179,8 @@ src/
 3. **Start Kafka on Mac Mini:**
    ```bash
    docker-compose up -d
+   # Wait for Kafka to be ready
+   sleep 30
    npm run macmini
    ```
 
@@ -184,16 +189,24 @@ src/
    npm run macbook
    ```
 
-## Next Steps
-
-- Try sending different types of messages
-- Run multiple consumers to see load balancing
-- Experiment with different topics
-- Add message filtering or processing logic
-- Set up multiple producers and consumers
-- Implement message persistence and replay
-
 ## Troubleshooting
+
+### Reset Kafka (if you encounter issues)
+If you encounter replication factor or connection issues, use the reset script:
+
+```bash
+# Run the reset script
+./reset-kafka.sh
+
+# Or manually reset
+docker-compose down
+docker system prune -a -f
+docker-compose up -d
+sleep 30
+npm run macmini
+```
+
+### Common Issues
 
 **"ECONNREFUSED" Error:**
 - Make sure Kafka is running on the correct machine
@@ -201,8 +214,12 @@ src/
 - Verify network connectivity between machines
 
 **"Replication-factor is invalid" Error:**
-- Restart Kafka with `docker-compose down && docker-compose up -d`
+- Use the reset script: `./reset-kafka.sh`
 - This ensures consistent replication factor settings
+
+**"There is no leader for this topic-partition" Error:**
+- This is normal during Kafka startup
+- Wait a few seconds for leadership election to complete
 
 **"Topic not found" Error:**
 - Kafka will automatically create topics when messages are sent
@@ -226,4 +243,5 @@ docker-compose down
 - `npm run producer` - Run local producer
 - `npm run consumer` - Run local consumer
 - `npm run macbook` - Run interactive producer for MacBook
-- `npm run macmini` - Run consumer for Mac Mini 
+- `npm run macmini` - Run consumer for Mac Mini
+- `./reset-kafka.sh` - Reset Kafka setup (fixes most issues) 
