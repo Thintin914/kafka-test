@@ -1,21 +1,15 @@
 import { Kafka } from 'kafkajs';
 import { kafkaConfig } from './config-macmini';
 
-// Create Kafka client
+// Create Kafka client with minimal configuration
 const kafka = new Kafka({
   clientId: kafkaConfig.clientId,
-  brokers: kafkaConfig.brokers,
-  retry: {
-    initialRetryTime: 100,
-    retries: 8
-  }
+  brokers: kafkaConfig.brokers
 });
 
-// Create consumer
+// Create consumer with minimal configuration
 const consumer = kafka.consumer({ 
-  groupId: kafkaConfig.groupId,
-  sessionTimeout: 30000,
-  heartbeatInterval: 3000
+  groupId: kafkaConfig.groupId
 });
 
 async function startConsumer() {
