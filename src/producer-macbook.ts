@@ -5,6 +5,10 @@ import { kafkaConfig } from './config-macbook';
 const kafka = new Kafka({
   clientId: kafkaConfig.clientId,
   brokers: kafkaConfig.brokers,
+  retry: {
+    initialRetryTime: 100,
+    retries: 8
+  }
 });
 
 // Create producer
