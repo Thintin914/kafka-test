@@ -21,7 +21,7 @@ async function sendMessage(message: string) {
       messages: [
         { 
           value: message,
-          timestamp: Date.now()
+          timestamp: Date.now().toString()
         },
       ],
     });
