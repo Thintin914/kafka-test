@@ -24,6 +24,7 @@ async function sendMessage(message: string) {
           timestamp: Date.now().toString()
         },
       ],
+      timeout: 30000,
     });
     
     console.log('✅ Message sent successfully to Mac Mini!');
